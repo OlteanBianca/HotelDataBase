@@ -1,0 +1,84 @@
+﻿<Window x:Class="DataBase.Views.EditAdditionalServices"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctx2="clr-namespace:DataBase.ViewModel.Commands" 
+        xmlns:ctx="clr-namespace:DataBase.ViewModel"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="EditAdditionalServices" Height="543.104" Width="562.808">
+
+    <Window.DataContext>
+        <ctx:EditAdditionalServicesVM/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <ctx2:Converter x:Key="multiConverter"></ctx2:Converter>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/DataBase;component/Resources/Background/wallpaper.jpg" Opacity="0.5"/>
+        </Grid.Background>
+
+        <DataGrid ItemsSource="{Binding Services}" HorizontalAlignment="Left" Name="datagrid"
+                  FontWeight="Bold" AutoGenerateColumns="False" Height="248" Opacity="0.7" IsReadOnly="True"
+                  Margin="22,70,0,0" VerticalAlignment="Top" Width="511" Background="#66F0F0F0" FontSize="22">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding AdditionalServiceName}" Width="330"  
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}" HeaderStringFormat=" {0}€" Width="150*"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Label Content="Edit additional services:" HorizontalAlignment="Left" Margin="10,0,0,0" FontStyle="Italic"
+            FontSize="30" FontWeight="Bold"  Width="348" VerticalAlignment="Top" Height="51"/>
+
+        <Label Content="Name:" HorizontalAlignment="Left" Margin="28,343,0,0" FontStyle="Italic"
+            FontSize="24" FontWeight="Bold"  Width="85" VerticalAlignment="Top" Height="40"/>
+
+        <Label Content="Price:" HorizontalAlignment="Left" Margin="33,399,0,0" FontStyle="Italic"
+            FontSize="24" FontWeight="Bold"  Width="85" VerticalAlignment="Top" Height="40"/>
+
+
+        <TextBox Text="{Binding SelectedItem.Price, ElementName=datagrid}" HorizontalAlignment="Left"  Margin="118,399,0,0" 
+                TextWrapping="Wrap" VerticalAlignment="Top" Width="85" FontSize="24" Height="40"/>
+
+        <TextBox Text="{Binding ElementName=datagrid, Path=SelectedItem.AdditionalServiceName}" HorizontalAlignment="Left" Margin="118,343,0,0" 
+                TextWrapping="Wrap" VerticalAlignment="Top" Width="390" FontSize="24" Height="40"/>
+
+        <Button Content="Cancel" Click="CancelClick" FontSize="24" Margin="28,457,425.8,9.6" Height="47"/>
+
+        <Button Content="Save" FontSize="24" Margin="428,457,23.8,9.6" Command="{Binding EditServiceCommand}"
+                CommandParameter="{Binding ElementName=datagrid, Path=SelectedItem}" Height="47"/>
+
+        <Button Command="{Binding DeleteServiceCommand}" CommandParameter="{Binding ElementName=datagrid, Path=SelectedItem}" 
+                Margin="405,10,0,0" HorizontalAlignment="Left" Height="37"
+                VerticalAlignment="Top" Width="42" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Button.Background>
+                <ImageBrush ImageSource="/DataBase;component/Resources/Icons/delete.png"/>
+            </Button.Background>
+        </Button>
+
+        <Button Command="{Binding AddServiceCommand}" HorizontalAlignment="Left" Height="37" Margin="363,10,0,0" 
+                VerticalAlignment="Top" Width="37" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Button.Background>
+                <ImageBrush ImageSource="/DataBase;component/Resources/Icons/add.png"/>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Window>

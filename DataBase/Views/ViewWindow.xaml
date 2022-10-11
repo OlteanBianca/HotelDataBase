@@ -1,0 +1,91 @@
+﻿<Window x:Class="DataBase.Views.ViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctx2="clr-namespace:DataBase.ViewModel.Commands" 
+        xmlns:viewmodel="clr-namespace:DataBase.ViewModel" 
+        d:DataContext="{d:DesignInstance Type=viewmodel:ViewVM}"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="ViewWindow" Height="506.518" Width="985.099">
+
+    <Window.Resources>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <ctx2:Converter x:Key="multiConverter"></ctx2:Converter>
+    </Window.Resources>
+
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/DataBase;component/Resources/Background/signIn.jpg"/>
+        </Grid.Background>
+
+        <Label Content="All reservation:" HorizontalAlignment="Left" Margin="37,4,0,0" Visibility="{Binding VisibilityR}"
+             FontSize="30" FontWeight="Bold" FontStyle="Italic" Width="364" VerticalAlignment="Top" Height="55"/>
+
+        <Label Content="All offers:" HorizontalAlignment="Left" Margin="37,4,0,0" Visibility="{Binding VisibilityO}"
+             FontSize="30" FontWeight="Bold" FontStyle="Italic" Width="364" VerticalAlignment="Top" Height="55"/>
+
+        <DataGrid ItemsSource="{Binding Reservations}" Visibility="{Binding VisibilityR}" HorizontalAlignment="Left" 
+                  FontWeight="Bold" AutoGenerateColumns="False" Height="316" Opacity="0.7"
+                  Margin="37,59,0,0" VerticalAlignment="Top" Width="904" Background="#66F0F0F0" FontSize="24">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Check-in" Binding="{Binding DateBeginning, StringFormat=\{0:dd-MMM-yyyy\}}" 
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" IsReadOnly="True" Width="210" />
+                <DataGridTextColumn Header="Check-out" Binding="{Binding DateEnd, StringFormat=\{0:dd-MMM-yyyy\}}"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" IsReadOnly="True" Width="210"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}" HeaderStringFormat=" {0}€" Width="150" IsReadOnly="True"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" />
+                <DataGridTextColumn Header="Nr rooms" Binding="{Binding RoomsReserved.Count}" Width="140" IsReadOnly="True"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}"/>
+                <DataGridTextColumn Header="State" Binding="{Binding State}" Width="140*" 
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style>
+                            <Setter Property="UIElement.IsEnabled" Value="{Binding CanEdit}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid ItemsSource="{Binding Offers}" Visibility="{Binding VisibilityO}" HorizontalAlignment="Left" Name="offers"
+                  FontWeight="Bold" AutoGenerateColumns="False" Height="316" Opacity="0.7" IsReadOnly="True"
+                  Margin="37,59,0,0" VerticalAlignment="Top" Width="904" Background="#66F0F0F0" FontSize="24">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="330"  
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Check-in" Binding="{Binding DateBeginning, StringFormat=\{0:dd-MMM-yyyy\}}" 
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="210" />
+                <DataGridTextColumn Header="Check-out" Binding="{Binding DateEnd, StringFormat=\{0:dd-MMM-yyyy\}}"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="210"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}" HeaderStringFormat=" {0}€" Width="150*"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Content="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding Reservations}" FontWeight="Bold"
+            VerticalAlignment="Top" BorderBrush="#FF181616" Background="#7FDDDDDD" Visibility="{Binding VisibilityR}"
+            HorizontalAlignment="Left" Height="45" Margin="741,409,0,0" FontSize="24" Width="174"/>
+
+        <Button Content="Reserve now" Click="ReserveClick" FontWeight="Bold"
+            VerticalAlignment="Top" BorderBrush="#FF181616" Background="#7FDDDDDD" Visibility="{Binding VisibilityO}"
+            HorizontalAlignment="Left" Height="45" Margin="741,409,0,0" FontSize="24" Width="174"/>
+        
+        <Button Content="Cancel" Click="CancelClick" Margin="101,409,0,0" FontSize="24" Width="174" Height="45"
+            VerticalAlignment="Top" BorderBrush="#FF181616" Background="#7FDDDDDD" FontWeight="Bold"
+            HorizontalAlignment="Left"/>
+
+    </Grid>
+</Window>

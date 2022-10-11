@@ -1,0 +1,115 @@
+﻿<Window x:Class="DataBase.Views.EditOffersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctx2="clr-namespace:DataBase.ViewModel.Commands" 
+        xmlns:ctx="clr-namespace:DataBase.ViewModel"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="EditOffersWindow" Height="621.798" Width="1036.083">
+
+    <Window.DataContext>
+        <ctx:EditOffersVM/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <ctx2:Converter x:Key="multiConverter"></ctx2:Converter>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/DataBase;component/Resources/Background/wallpaper.jpg" Opacity="0.5"/>
+        </Grid.Background>
+        
+        <DataGrid ItemsSource="{Binding Offers}" HorizontalAlignment="Left" Name="datagrid"
+                  FontWeight="Bold" AutoGenerateColumns="False" Height="248" Opacity="0.7" IsReadOnly="True"
+                  Margin="22,70,0,0" VerticalAlignment="Top" Width="986" Background="#66F0F0F0" FontSize="22">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="330"  
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Check-in" Binding="{Binding DateBeginning, StringFormat=\{0:dd-MMM-yyyy\}}" 
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="190" />
+                <DataGridTextColumn Header="Check-out" Binding="{Binding DateEnd, StringFormat=\{0:dd-MMM-yyyy\}}"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="190"/>
+                <DataGridTextColumn Header="Room" Binding="{Binding RoomType}" 
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" Width="160" />
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}" HeaderStringFormat=" {0}€" Width="150*"
+                                    HeaderStyle="{StaticResource CenterGridHeaderStyle}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Label Content="Edit offers:" HorizontalAlignment="Left" Margin="10,0,0,0" FontStyle="Italic"
+            FontSize="30" FontWeight="Bold"  Width="179" VerticalAlignment="Top" Height="51"/>
+
+        <Label Content="Name:" HorizontalAlignment="Left" Margin="28,343,0,0" FontStyle="Italic"
+            FontSize="24" FontWeight="Bold"  Width="85" VerticalAlignment="Top" Height="40"/>
+
+        <Label Content="Check-in date:" HorizontalAlignment="Left" Margin="29,399,0,0" FontStyle="Italic"
+            FontSize="24" FontWeight="Bold"  Width="179" VerticalAlignment="Top" Height="40"/>
+
+        <Label Content="Check-out date:" HorizontalAlignment="Left" Margin="29,456,0,0" FontStyle="Italic"
+            FontSize="24" FontWeight="Bold"  Width="191" VerticalAlignment="Top" Height="40"/>
+
+        <Label Content="Room type:" HorizontalAlignment="Left" Margin="506,399,0,0" FontStyle="Italic"
+            FontSize="24" FontWeight="Bold"  Width="137" VerticalAlignment="Top" Height="40"/>
+
+        <Label Content="Price:" HorizontalAlignment="Left" Margin="506,456,0,0" FontStyle="Italic"
+            FontSize="24" FontWeight="Bold"  Width="85" VerticalAlignment="Top" Height="40"/>
+
+        <Viewbox HorizontalAlignment="Left" Height="47" Margin="225,395,0,0" VerticalAlignment="Top" Width="206">
+            <DatePicker x:Name="begin" SelectedDate="{Binding ElementName=datagrid, Path=SelectedItem.DateBeginning}"/>
+        </Viewbox>
+
+        <Viewbox HorizontalAlignment="Left" Height="47" Margin="225,456,0,0" VerticalAlignment="Top" Width="206">
+            <DatePicker x:Name="end" SelectedDate="{Binding ElementName=datagrid, Path=SelectedItem.DateEnd}"/>
+        </Viewbox>
+
+
+        <TextBox Text="{Binding SelectedItem.Price, ElementName=datagrid}" HorizontalAlignment="Left"  Margin="591,456,0,0" 
+                TextWrapping="Wrap" VerticalAlignment="Top" Width="85" FontSize="24" Height="40"/>
+
+        <TextBox Text="{Binding ElementName=datagrid, Path=SelectedItem.Name}" HorizontalAlignment="Left" Margin="118,343,0,0" 
+                TextWrapping="Wrap" VerticalAlignment="Top" Width="853" FontSize="24" Height="40"/>
+  
+        <Button Content="Cancel" Click="CancelClick" FontSize="24" Margin="100,531,774.6,10"/>
+
+        <Button Content="Save" FontSize="24" Margin="796,531,70.6,10" Command="{Binding EditOfferCommand}">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource multiConverter}">
+                    <Binding ElementName="combo" Path="SelectedItem"/>
+                    <Binding ElementName="datagrid" Path="SelectedItem"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+
+        <Button Command="{Binding DeleteOfferCommand}" CommandParameter="{Binding ElementName=datagrid, Path=SelectedItem}" 
+                Margin="227,3,0,0" HorizontalAlignment="Left" Height="45"
+                VerticalAlignment="Top" Width="48" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Button.Background>
+                <ImageBrush ImageSource="/DataBase;component/Resources/Icons/delete.png"/>
+            </Button.Background>
+        </Button>
+
+        <Button Command="{Binding AddOfferCommand}" HorizontalAlignment="Left" Height="45" Margin="177,3,0,0" 
+                VerticalAlignment="Top" Width="45" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Button.Background>
+                <ImageBrush ImageSource="/DataBase;component/Resources/Icons/add.png"/>
+            </Button.Background>
+        </Button>
+        
+        <ComboBox ItemsSource="{Binding AllRooms}" DisplayMemberPath="Item1" Name="combo" Width="235"
+                  FontSize="24" HorizontalAlignment="Left" Height="47" Margin="648,399,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>

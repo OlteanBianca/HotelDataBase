@@ -1,0 +1,164 @@
+﻿<Window x:Class="DataBase.Views.EditRooms"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStartupLocation="CenterScreen"
+        xmlns:ctx2="clr-namespace:DataBase.ViewModel.Commands" 
+        xmlns:ctx="clr-namespace:DataBase.ViewModel"
+        mc:Ignorable="d"
+        Title="EditRooms" Height="782.531" Width="1416.204">
+
+    <Window.DataContext>
+        <ctx:EditRoomsVM/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ctx2:Converter x:Key="multiConverter"></ctx2:Converter>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/DataBase;component/Resources/Background/wallpaper.jpg" Opacity="0.5"/>
+        </Grid.Background>
+
+        <Label Content="Edit Rooms:" HorizontalAlignment="Left" Margin="10,0,0,0" FontStyle="Italic"
+                FontSize="30" FontWeight="Bold"  Width="179" VerticalAlignment="Top" Height="51"/>
+
+        <Label Content="Select room:" HorizontalAlignment="Left" Margin="10,51,0,0" FontStyle="Italic"
+                FontSize="26" FontWeight="Bold"  Width="189" VerticalAlignment="Top" Height="49"/>
+
+        <Label Content="Or add a new room:" HorizontalAlignment="Left" Margin="560,49,0,0" FontStyle="Italic"
+                FontSize="26" FontWeight="Bold"  Width="303" VerticalAlignment="Top" Height="49"/>
+
+        <ComboBox ItemsSource="{Binding Path=AllRooms}" DisplayMemberPath="RoomType" SelectedItem="{Binding SelectedRoom}" Width="235"
+                  FontSize="24" HorizontalAlignment="Left" Height="49" Margin="204,51,0,0" VerticalAlignment="Top"/>
+
+        <TextBox x:Name="text" Text="" HorizontalAlignment="Left" Height="49" Margin="868,51,0,0" TextWrapping="Wrap"
+                  VerticalAlignment="Top" Width="225" FontSize="32" VerticalContentAlignment="Center" />
+
+        <Button Content="Continue" Command="{Binding AddRoomCommand}" CommandParameter="{Binding ElementName=text, Path=Text}" 
+                FontSize="24" Margin="1143,51,103.6,652.8"/>
+  
+        <Button Content="Cancel" Click="CancelClick" FontSize="24" Margin="34,682,1210.6,13.8" />
+
+        
+        <Grid x:Name="editFeatures" Visibility="Hidden" HorizontalAlignment="Left" Height="149" Margin="809,219,0,0" 
+              VerticalAlignment="Top" Width="591">
+          
+            <Label Content="Select feature:" HorizontalAlignment="Left" Height="46" Margin="10,8,0,0" VerticalAlignment="Top"
+                FontSize="24" FontWeight="Bold" FontStyle="Italic" Width="197" RenderTransformOrigin="0.5,0.5"/>
+
+            <Label Content="Or add new feature:" HorizontalAlignment="Left" Height="52" Margin="10,82,0,0" VerticalAlignment="Top"
+                FontSize="24" FontWeight="Bold" FontStyle="Italic" Width="234" />
+
+            <ComboBox Name="addFeature" ItemsSource="{Binding FeaturesNotIncluded}" DisplayMemberPath="Item1" Width="274"
+                FontSize="24" HorizontalAlignment="Left" Height="48" Margin="249,10,0,0" VerticalAlignment="Top"/>
+
+            <TextBox Name="addNewFeature" HorizontalAlignment="Left" Height="48" Margin="249,82,0,0" TextWrapping="Wrap"
+                VerticalAlignment="Top" Width="274" FontSize="32" VerticalContentAlignment="Center" />
+
+            <Button Command="{Binding AddFeatureCommand}" Margin="528,42,0,0" HorizontalAlignment="Left"
+                    VerticalAlignment="Top" Width="58" BorderBrush="{x:Null}" Foreground="{x:Null}"  Height="49">
+                <Button.Background>
+                    <ImageBrush ImageSource="/DataBase;component/Resources/Icons/add.png"/>
+                </Button.Background>
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource multiConverter}">
+                        <Binding ElementName="addFeature" Path="SelectedItem"/>
+                        <Binding ElementName="addNewFeature" Path="Text"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+        </Grid>
+
+        <Grid Visibility="{Binding Visibility}" HorizontalAlignment="Left" Height="577" Margin="10,100,0,0" VerticalAlignment="Top" Width="1376">
+
+            <Label Content="Number of rooms: " HorizontalAlignment="Left" Height="52" Margin="0,10,0,0" VerticalAlignment="Top"
+                FontSize="26" FontWeight="Bold" FontStyle="Italic" Width="236"/>
+
+            <Label Content="Images:" HorizontalAlignment="Left" Height="55" Margin="0,264,0,0" 
+                FontSize="26" FontWeight="Bold" FontStyle="Italic" Width="132" VerticalAlignment="Top"/>
+
+            <Label Content="Features:" HorizontalAlignment="Left" Height="55" Margin="0,67,0,0" 
+                FontSize="26" FontWeight="Bold" FontStyle="Italic" Width="132" VerticalAlignment="Top" RenderTransformOrigin="0.517,-0.131"/>
+
+            <TextBox Name="nrRooms" Text="{Binding SelectedRoom.NumberOfRooms}" HorizontalAlignment="Left" Margin="241,10,0,0" 
+                  VerticalAlignment="Top" Width="84" FontSize="26" HorizontalContentAlignment="Center" Height="45" TextWrapping="Wrap" BorderBrush="#FF221B1B"/>
+
+            <Button Content="Save" Command="{Binding EditRoomsNumberCommand}" CommandParameter="{Binding ElementName=nrRooms, Path=Text}" 
+                    FontSize="24" Margin="348,12,940,522" />
+
+            <Button Command="{Binding DeleteFeatureCommand}" CommandParameter="{Binding ElementName=featuresList, Path=SelectedItem}" Margin="190,70,0,0" 
+                VerticalAlignment="Top" Width="48" BorderBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Left" Height="45">
+                <Button.Background>
+                    <ImageBrush ImageSource="/DataBase;component/Resources/Icons/delete.png"/>
+                </Button.Background>
+            </Button>
+
+            <Button Command="{Binding AddImageCommand}" HorizontalAlignment="Left" Height="45" Margin="106,269,0,0" 
+                VerticalAlignment="Top" Width="45" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/DataBase;component/Resources/Icons/add.png"/>
+                </Button.Background>
+            </Button>
+
+            <Button Command="{Binding DeleteImageCommand}" CommandParameter="{Binding ElementName=imageList, Path=SelectedItem}" 
+                    HorizontalAlignment="Left" Height="45" Margin="156,269,0,0" 
+                VerticalAlignment="Top" Width="50" BorderBrush="{x:Null}" Foreground="{x:Null}" >
+                <Button.Background>
+                    <ImageBrush ImageSource="/DataBase;component/Resources/Icons/delete.png"/>
+                </Button.Background>
+            </Button>
+
+            <Button x:Name="features" Click="EditClicked" HorizontalAlignment="Left" Height="45" Margin="137,70,0,0" 
+                VerticalAlignment="Top" Width="48" BorderBrush="{x:Null}" Foreground="{x:Null}" RenderTransformOrigin="0.475,-0.736">
+                <Button.Background>
+                    <ImageBrush ImageSource="/DataBase;component/Resources/Icons/add.png"/>
+                </Button.Background>
+            </Button>
+
+            <ListView Name="featuresList" ItemsSource="{Binding SelectedRoom.Features}" Height="130" Margin="0,127,586,0"  
+                      VerticalAlignment="Top" Background="{x:Null}" Foreground="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF090A0B">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Item1}"  Height="40" VerticalContentAlignment="Center" Width="auto" FontSize="24" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel x:Name="keyboard" Orientation="Horizontal">
+                            <WrapPanel.Resources>
+                                <Style TargetType="{x:Type Label}">
+                                    <Setter Property="Margin" Value="3,3,0,0"/>
+                                </Style>
+                            </WrapPanel.Resources>
+                        </WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ListView>
+
+            <ListView Name="imageList" ItemsSource="{Binding SelectedRoom.Images, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     Margin="0,324,34,0" VerticalAlignment="Top" Grid.Column="0" Height="242" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="#FF101112" >
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding Item1, UpdateSourceTrigger=PropertyChanged}" Width="250" Height="250" Margin="5,5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel x:Name="keyboard">
+                            <WrapPanel.Resources>
+                                <Style TargetType="Image">
+                                    <Setter Property="Margin" Value="10,10,10,0"/>
+                                </Style>
+                            </WrapPanel.Resources>
+                        </WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ListView>
+        </Grid>
+
+    </Grid>
+</Window>
